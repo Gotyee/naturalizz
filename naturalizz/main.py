@@ -1,8 +1,8 @@
 import streamlit as st
 from PIL import Image
 
-from naturalizz.configuration import init_session, reset_session
-from naturalizz.data_retrieval import random_taxon, retrieve_taxon_data
+from .configuration import init_session, reset_session
+from .data_retrieval import random_taxon, retrieve_taxon_data
 
 init_session()
 
