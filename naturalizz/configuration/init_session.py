@@ -1,4 +1,4 @@
-from streamlit import session_state
+from streamlit import cache_data, session_state
 
 
 def init_session() -> None:
@@ -31,7 +31,7 @@ def init_session() -> None:
 
 def reset_session() -> None:
     """Reset session_state parameters"""
-
+    cache_data.clear()
     session_state.hide = False
     session_state.data = None
     session_state.label_reveal = False

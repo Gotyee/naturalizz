@@ -45,10 +45,10 @@ INSECT_LIST = [
     "Guèpe",
     "Gyrin",
     "Hanneton",
-    "Hibou ou fiancée",  # ! issue with this one
+    "fiancée",  # ! issue with this one
     "Ichneumon",
-    "Lampyre ou ver luisant",
-    "Libellule (s.s.)",
+    "Lampyre",
+    "Libellule",
     "Lichenée",
     "Lucane cerf-volant",
     "Machaon",
