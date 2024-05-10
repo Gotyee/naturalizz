@@ -1,8 +1,8 @@
 import streamlit as st
 from PIL import Image
 
-from .naturalizz.configuration import init_session, reset_session
-from .naturalizz.data_retrieval import random_taxon, retrieve_taxon_data
+from naturalizz.configuration import init_session, reset_session
+from naturalizz.data_retrieval import random_taxon, retrieve_taxon_data
 
 init_session()
 
@@ -53,5 +53,6 @@ if st.session_state.hide:
         st.write(st.session_state.suborder)
         st.write(st.session_state.name)
         if not st.session_state.label_reveal:
+            st.button("Click to Hide/Reveal Text", on_click=reveal_label)
             st.button("Click to Hide/Reveal Text", on_click=reveal_label)
             st.button("Click to Hide/Reveal Text", on_click=reveal_label)
