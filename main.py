@@ -9,12 +9,15 @@ init_session()
 
 def picture_launcher():
     reset_session()
+    retrieve_taxon_data.clear()
+
     st.session_state.hide = not st.session_state.hide
     st.session_state.data = retrieve_taxon_data(taxon_name="Ecaille martre")
 
 
 def reveal_label():
     print(st.session_state.data)
+
     st.session_state.name = f"Nom complet: {st.session_state.data['name']} \n"
     st.session_state.order = f"Ordre: {st.session_state.data['order']}"
     st.session_state.family = f"Famille: {st.session_state.data['family']}"
