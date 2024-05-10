@@ -75,7 +75,7 @@ INSECT_LIST = [
     "Punaise des lits",
     "Punaise verte",
     "Ranâtre",
-    "Rhinocéros ou orycte",
+    "Orycte",
     "Scolyte",
     "Scarabée sacré",
     "Sialis",

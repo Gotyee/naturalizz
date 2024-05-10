@@ -32,7 +32,6 @@ def retrieve_taxon_data(
     if not taxon_api:
         raise (f"There was an issue for {taxon_name}")
     print(taxon_name)
-    print(taxon_api)
     taxon = Taxon.from_json_list(taxon_api)[0]
     ancestors_api = get_taxa_by_id(taxon.ancestor_ids, locale="fr")
     ancestors = Taxon.from_json_list(ancestors_api)
