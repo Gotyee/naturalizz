@@ -14,6 +14,7 @@ def picture_launcher():
 
 
 def reveal_label():
+    print(st.session_state.data)
     st.session_state.name = f"Nom complet: {st.session_state.data['name']} \n"
     st.session_state.order = f"Ordre: {st.session_state.data['order']}"
     st.session_state.family = f"Famille: {st.session_state.data['family']}"
