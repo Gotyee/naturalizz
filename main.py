@@ -50,9 +50,9 @@ if st.session_state.hide:
 
         st.image(image, width=new_width)
         st.write(st.session_state.order)
-        st.write(st.session_state.suborder)
+        st.write(st.session_state.family)
+        st.write(st.session_state.genus)
+        st.write(st.session_state.species)
         st.write(st.session_state.name)
         if not st.session_state.label_reveal:
-            st.button("Click to Hide/Reveal Text", on_click=reveal_label)
-            st.button("Click to Hide/Reveal Text", on_click=reveal_label)
             st.button("Click to Hide/Reveal Text", on_click=reveal_label)
