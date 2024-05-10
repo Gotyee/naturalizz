@@ -1,5 +1,6 @@
 from random import choice
 
+import streamlit as st
 from pyinaturalist import Observation, Taxon
 from pyinaturalist.v1.observations import get_observations
 from pyinaturalist.v1.taxa import get_taxa, get_taxa_by_id
@@ -23,6 +24,7 @@ def retrieve_observations(taxon_name, page=10, per_page=20):
     }
 
 
+@st.cache_data
 def retrieve_taxon_data(
     taxon_name, rank_filter=["genus", "species"], page=1, per_page=1
 ):
