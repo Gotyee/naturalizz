@@ -19,8 +19,14 @@ def init_session() -> None:
     if "order" not in session_state:
         session_state.order = ""
 
-    if "suborder" not in session_state:
-        session_state.suborder = ""
+    if "family" not in session_state:
+        session_state.family = ""
+
+    if "genus" not in session_state:
+        session_state.genus = ""
+
+    if "species" not in session_state:
+        session_state.species = ""
 
 
 def reset_session() -> None:
@@ -31,4 +37,6 @@ def reset_session() -> None:
     session_state.label_reveal = False
     session_state.name = ""
     session_state.order = ""
-    session_state.suborder = ""
+    session_state.family = ""
+    session_state.genus = ""
+    session_state.species = ""
