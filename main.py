@@ -2,7 +2,7 @@ import streamlit as st
 from PIL import Image
 
 from naturalizz.configuration import init_session, reset_session
-from naturalizz.data_retrieval import retrieve_taxon_data
+from naturalizz.data_retrieval import random_taxon, retrieve_taxon_data
 
 init_session()
 
@@ -12,7 +12,7 @@ def picture_launcher():
     retrieve_taxon_data.clear()
 
     st.session_state.hide = not st.session_state.hide
-    st.session_state.data = retrieve_taxon_data(taxon_name="Ecaille martre")
+    st.session_state.data = retrieve_taxon_data(taxon_name=random_taxon())
 
 
 def reveal_label():
