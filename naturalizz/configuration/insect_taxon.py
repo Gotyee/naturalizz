@@ -5,10 +5,11 @@ INSECT_LIST = [
     "Ammophile",
     "Apollon",
     "Argus bleu",
+    "Anopheles",
     "Belle-Dame",
     "Blatte américaine",
     "Bombyx du chêne",
-    "Bombyx du mûrier",
+    "Bombyx mori",  # Bombyx du mûrier
     "Bourdon",
     "Bupreste",
     "Cafard",

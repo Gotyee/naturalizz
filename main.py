@@ -9,7 +9,6 @@ init_session()
 
 def picture_launcher():
     reset_session()
-    retrieve_taxon_data.clear()
 
     st.session_state.hide = not st.session_state.hide
     st.session_state.data = retrieve_taxon_data(taxon_name=random_taxon())
