@@ -1,5 +1,4 @@
 import streamlit as st
-from pyinstrument import Profiler
 
 from naturalizz.app_actions import (
     fill_text_field_with_data,
@@ -8,8 +7,6 @@ from naturalizz.app_actions import (
 )
 from naturalizz.configuration import init_session
 
-profiler = Profiler()
-profiler.start()
 init_session()
 
 st.title("Naturalist quizz", anchor=False)
@@ -47,7 +44,3 @@ if st.session_state.hide:
                 "Click to Hide/Reveal Text",
                 on_click=fill_text_field_with_data,
             )
-
-
-profiler.stop()
-# profiler.print()
