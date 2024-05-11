@@ -2,8 +2,7 @@ from streamlit import session_state
 
 
 def init_session() -> None:
-    """Init session_state parameters"""
-
+    """Init session_state parameters."""
     if "hide" not in session_state:
         session_state.hide = False
 
@@ -28,9 +27,12 @@ def init_session() -> None:
     if "species" not in session_state:
         session_state.species = ""
 
+    if "config_choice" not in session_state:
+        session_state.config_choice = "ALL"
+
 
 def reset_session() -> None:
-    """Reset session_state parameters"""
+    """Reset session_state parameters."""
     session_state.hide = False
     session_state.data = None
     session_state.label_reveal = False
