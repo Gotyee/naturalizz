@@ -14,10 +14,7 @@ def quizz_starter() -> None:
     clear_cache_data_func()
     session_state.hide = not session_state.hide
     random_taxon_data = random_taxon(taxon_type=session_state.config_choice)
-    session_state.data = retrieve_taxon_data(
-        taxon_name=random_taxon_data["taxon"],
-        rank_filter=random_taxon_data["rank_filter"],
-    )
+    session_state.data = retrieve_taxon_data(random_taxon_data)
 
 
 def fill_text_field_with_data() -> None:
