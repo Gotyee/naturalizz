@@ -7,7 +7,6 @@ from requests import get
 
 def retrieve_and_resize_img_list(img_list: list[Photo], max_height: int = 400) -> Image:
     """Retrieve and resize each image of a list."""
-    print(img_list)
     return [retrieve_and_resize_img(photo, max_height) for photo in img_list]
 
 

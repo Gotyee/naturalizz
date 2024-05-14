@@ -26,10 +26,11 @@ def retrieve_taxon_data(
 
     Parameters
     ----------
-    taxon_name : str
-        Taxon's name that will be used for search
-    rank_filter : str or list[str]
-        Ranks used for searching any match for taxon_name
+    taxon_search_data : dict
+        Contains parameter for API call such as
+            - taxon_name
+            - rank_filter
+            - lowest_common_rank_id
     page : int
         Number of results page
     per_page : int
@@ -84,7 +85,6 @@ def get_taxons(
             per_page=per_page,
         ),
     )
-    print(taxon_name)
     if not taxons:
         msg = f"There was an issue for {taxon_name}"
         raise ValueError(msg)
@@ -139,7 +139,6 @@ def _random_taxon_photo(taxon_id: int, nb_photos: int = NB_PIC_DISPLAYED) -> Tax
     """Retrieve all images related to a taxon and returns three randomly."""
     taxon_obs = _get_obs_from_taxon(taxon_id)
     taxon_photos = [pic for obs in taxon_obs for pic in obs.photos]
-    print(len(taxon_photos))
     if not taxon_photos:
         msg = f"No picture for taxon ID {taxon_id}"
         raise ValueError(msg)

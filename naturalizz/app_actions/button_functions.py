@@ -16,6 +16,7 @@ def quizz_starter() -> None:
     session_state.show = not session_state.show
     random_taxon_data = random_taxon(taxon_type=session_state.config_choice)
     session_state.data = retrieve_taxon_data(random_taxon_data)
+    print("end once")
 
 
 def fill_text_field_with_data() -> None:

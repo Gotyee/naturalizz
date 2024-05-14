@@ -26,14 +26,19 @@ with st.container():
     launch_pic = st.button(
         "Launch picture",
         key="launch_pic",
-        on_click=quizz_starter,
         use_container_width=True,
     )
 
-image = display_images()
-results = display_results()
-if not st.session_state.reveal_data and st.session_state.show:
-    st.button(
-        "Click to Hide/Reveal Text",
-        on_click=fill_text_field_with_data,
-    )
+try:
+    if launch_pic:
+        quizz_starter()
+    image = display_images()
+    results = display_results()
+    if not st.session_state.reveal_data and st.session_state.show:
+        st.button(
+            "Click to Hide/Reveal Text",
+            on_click=fill_text_field_with_data,
+        )
+except Exception as e:
+    st.error(e)
+    launch_pic = False
