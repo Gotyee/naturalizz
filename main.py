@@ -1,15 +1,16 @@
 import streamlit as st
 
 from naturalizz.app_actions import (
+    display_images,
+    display_results,
     fill_text_field_with_data,
+    init_session,
     quizz_starter,
-    retrieve_and_resize_img,
 )
-from naturalizz.configuration import init_session
 
 init_session()
 
-st.title("Naturalist quizz", anchor=False)
+st.title("Naturalizz", anchor=False)
 with st.container():
     config_choice = (
         st.radio(
@@ -22,25 +23,22 @@ with st.container():
 
 
 with st.container():
-    st.button(
+    launch_pic = st.button(
         "Launch picture",
         key="launch_pic",
-        on_click=quizz_starter,
         use_container_width=True,
     )
 
-if st.session_state.hide:
-    secret = st.container()
-    with secret:
-        # TODO: show 2-3 pictures
-        st.image(retrieve_and_resize_img(st.session_state.data["photo"]))
-        st.write(st.session_state.order)
-        st.write(st.session_state.family)
-        st.write(st.session_state.genus)
-        st.write(st.session_state.species)
-        st.write(st.session_state.name)
-        if not st.session_state.label_reveal:
-            st.button(
-                "Click to Hide/Reveal Text",
-                on_click=fill_text_field_with_data,
-            )
+try:
+    if launch_pic:
+        quizz_starter()
+    image = display_images()
+    results = display_results()
+    if not st.session_state.reveal_data and st.session_state.show:
+        st.button(
+            "Click to Hide/Reveal Text",
+            on_click=fill_text_field_with_data,
+        )
+except Exception as e:
+    st.error(e)
+    launch_pic = False
