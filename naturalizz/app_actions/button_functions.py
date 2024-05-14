@@ -1,6 +1,7 @@
 from streamlit import session_state
 
-from naturalizz.configuration import RANKS, reset_session
+from naturalizz.app_actions.session import reset_session
+from naturalizz.configuration import RANKS
 from naturalizz.data_retrieval import (
     clear_cache_data_func,
     random_taxon,
@@ -12,7 +13,7 @@ def quizz_starter() -> None:
     """Reset sessions_state parameters and retrieve taxon data."""
     reset_session()
     clear_cache_data_func()
-    session_state.hide = not session_state.hide
+    session_state.show = not session_state.show
     random_taxon_data = random_taxon(taxon_type=session_state.config_choice)
     session_state.data = retrieve_taxon_data(random_taxon_data)
 
@@ -25,4 +26,4 @@ def fill_text_field_with_data() -> None:
             for key, value in RANKS.items()
         },
     )
-    session_state.label_reveal = True
+    session_state.reveal_data = True

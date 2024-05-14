@@ -12,7 +12,6 @@ def _random_insect_taxon() -> dict:
     return {
         "taxon": choice(INSECT_TO_SEARCH["taxon_list"]),
         "lowest_common_rank_id": INSECT_TO_SEARCH["lowest_common_rank_id"],
-        "rank_filter": ["genus", "species"],
     }
 
 
@@ -22,7 +21,6 @@ def _random_plant_taxon() -> dict:
         return {
             "taxon": choice(PLANTS_SPECIES_TO_SEARCH["taxon_list"]),
             "lowest_common_rank_id": PLANTS_SPECIES_TO_SEARCH["lowest_common_rank_id"],
-            "rank_filter": ["genus", "species"],
         }
     return {
         "taxon": choice(PLANTS_FAMILIES),

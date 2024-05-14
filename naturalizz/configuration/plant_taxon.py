@@ -42,7 +42,7 @@ PLANTS_SPECIES_TO_SEARCH = {
 }
 
 PLANTS_FAMILIES = [
-    "Amaryllidacées",
+    "Amaryllidaceae",
     "Apiacées",
     "Astéracées",
     "Brassicacées",
@@ -54,7 +54,7 @@ PLANTS_FAMILIES = [
     "Juncaceae",
     "Lamiacées",
     "Liliacées",
-    "Malvacées",
+    "Malvaceae",
     "Orchidaceae",
     "Papaveraceae",
     "Poacées",
@@ -62,6 +62,6 @@ PLANTS_FAMILIES = [
     "Renonculacées",
     "Rosacées",
     "Rubiacées",
-    "Scrophulariacées",
+    "Scrophulariaceae",
     "Solanaceae",
 ]
