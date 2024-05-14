@@ -4,6 +4,7 @@ from naturalizz.app_actions.session import reset_session
 from naturalizz.configuration import RANKS
 from naturalizz.data_retrieval import (
     clear_cache_data_func,
+    clear_random_cache,
     random_taxon,
     retrieve_taxon_data,
 )
@@ -13,10 +14,10 @@ def quizz_starter() -> None:
     """Reset sessions_state parameters and retrieve taxon data."""
     reset_session()
     clear_cache_data_func()
+    clear_random_cache()
     session_state.show = not session_state.show
     random_taxon_data = random_taxon(taxon_type=session_state.config_choice)
     session_state.data = retrieve_taxon_data(random_taxon_data)
-    print("end once")
 
 
 def fill_text_field_with_data() -> None:
