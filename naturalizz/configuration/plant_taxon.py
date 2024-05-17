@@ -1,6 +1,6 @@
 PLANTS_SPECIES_TO_SEARCH = {
     "lowest_common_rank_id": 211194,  # Tracheophyta
-    "taxon_list": [
+    "taxon": [
         "Ajonc",
         "Aubépine",
         "Aulne",
@@ -41,27 +41,30 @@ PLANTS_SPECIES_TO_SEARCH = {
     ],
 }
 
-PLANTS_FAMILIES = [
-    "Amaryllidaceae",
-    "Apiacées",
-    "Astéracées",
-    "Brassicacées",
-    "Caryophyllacées",
-    "Cypéracées",
-    "Fabacées",
-    "Géraniacées",
-    "Iridacées",
-    "Juncaceae",
-    "Lamiacées",
-    "Liliacées",
-    "Malvaceae",
-    "Orchidaceae",
-    "Papaveraceae",
-    "Poacées",
-    "Primulaceae",
-    "Renonculacées",
-    "Rosacées",
-    "Rubiacées",
-    "Scrophulariaceae",
-    "Solanaceae",
-]
+PLANTS_FAMILIES = {
+    "lowest_common_rank_id": None,  # TODO : find common ancestor
+    "taxon": [
+        "Amaryllidaceae",
+        "Apiacées",
+        "Astéracées",
+        "Brassicacées",
+        "Caryophyllacées",
+        "Cypéracées",
+        "Fabacées",
+        "Géraniacées",
+        "Iridacées",
+        "Juncaceae",
+        "Lamiacées",
+        "Liliacées",
+        "Malvaceae",
+        "Orchidaceae",
+        "Papaveraceae",
+        "Poacées",
+        "Primulaceae",
+        "Renonculacées",
+        "Rosacées",
+        "Rubiacées",
+        "Scrophulariaceae",
+        "Solanaceae",
+    ],
+}

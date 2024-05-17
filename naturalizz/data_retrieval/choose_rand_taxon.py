@@ -1,6 +1,7 @@
 from random import choice
 
-from streamlit import cache_data
+from pandas import DataFrame
+from streamlit import cache_data, session_state
 
 from naturalizz.configuration import (
     INSECT_TO_SEARCH,
@@ -12,10 +13,20 @@ from naturalizz.configuration import (
 @cache_data(show_spinner=False)
 def _random_insect_taxon() -> dict:
     """Select a random insect taxon from a predefined list."""
-    return {
-        "taxon": choice(INSECT_TO_SEARCH["taxon_list"]),
-        "lowest_common_rank_id": INSECT_TO_SEARCH["lowest_common_rank_id"],
-    }
+    insects_psossbilities = session_state.insect_to_search.copy()
+    print(len(insects_psossbilities))
+    if insects_psossbilities.empty:
+        insects_psossbilities = DataFrame(
+            [
+                (taxon, INSECT_TO_SEARCH["lowest_common_rank_id"])
+                for taxon in INSECT_TO_SEARCH["taxon"]
+            ],
+            columns=["taxon", "lowest_common_rank_id"],
+        )
+    chosen_insect = insects_psossbilities.sample(n=1)
+    session_state.insect_to_search = insects_psossbilities.drop(chosen_insect.index)
+    print(len(session_state.insect_to_search))
+    return chosen_insect.to_dict(orient="records")[0]
 
 
 @cache_data(show_spinner=False)
