@@ -1,13 +1,18 @@
 import streamlit as st
+from pyinstrument import Profiler
 
 from naturalizz.app_actions import (
-    display_images,
-    display_results,
     fill_text_field_with_data,
     init_session,
     quizz_starter,
 )
+from naturalizz.display import (
+    display_images,
+    display_results,
+)
 
+prof = Profiler()
+prof.start()
 init_session()
 
 st.title("Naturalizz", anchor=False)
@@ -40,5 +45,8 @@ try:
             on_click=fill_text_field_with_data,
         )
 except Exception as e:
-    st.error(e)
+    st.exception(e)
     launch_pic = False
+
+prof.stop()
+prof.print()

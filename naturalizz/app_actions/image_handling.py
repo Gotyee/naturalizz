@@ -1,13 +1,28 @@
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from io import BytesIO
 
 from PIL import Image
 from pyinaturalist.models.media import Photo
 from requests import get
+from streamlit import cache_data
 
 
-def retrieve_and_resize_img_list(img_list: list[Photo], max_height: int = 400) -> Image:
+def clear_image_cache() -> None:
+    retrieve_and_resize_img_list.clear()
+
+
+@cache_data(show_spinner=False)
+def retrieve_and_resize_img_list(
+    _img_list: list[Photo],
+    max_height: int = 400,
+) -> Image:
     """Retrieve and resize each image of a list."""
-    return [retrieve_and_resize_img(photo, max_height) for photo in img_list]
+    with ThreadPoolExecutor() as executor:
+        futures = [
+            executor.submit(retrieve_and_resize_img, photo, max_height)
+            for photo in _img_list
+        ]
+        return [future.result() for future in as_completed(futures)]
 
 
 def retrieve_and_resize_img(photo: Photo, max_height: int = 400) -> Image:

@@ -1,5 +1,6 @@
 from streamlit import session_state
 
+from naturalizz.app_actions.image_handling import clear_image_cache
 from naturalizz.app_actions.session import reset_session
 from naturalizz.configuration import RANKS
 from naturalizz.data_retrieval import (
@@ -15,9 +16,14 @@ def quizz_starter() -> None:
     reset_session()
     clear_cache_data_func()
     clear_random_cache()
+    clear_image_cache()
+
     session_state.show = not session_state.show
     random_taxon_data = random_taxon(taxon_type=session_state.config_choice)
     session_state.data = retrieve_taxon_data(random_taxon_data)
+    # session_state.data = retrieve_taxon_data(
+    #     {"lowest_common_rank_id": 372739, "taxon": "Tenthrède"},
+    # )
 
 
 def fill_text_field_with_data() -> None:

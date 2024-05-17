@@ -58,7 +58,7 @@ PLANTS_FAMILIES = [
     "Orchidaceae",
     "Papaveraceae",
     "Poacées",
-    "Primulacées",
+    "Primulaceae",
     "Renonculacées",
     "Rosacées",
     "Rubiacées",
