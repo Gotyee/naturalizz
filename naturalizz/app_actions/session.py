@@ -1,4 +1,3 @@
-from pandas import DataFrame
 from streamlit import session_state
 
 from naturalizz.configuration import (
@@ -6,6 +5,7 @@ from naturalizz.configuration import (
     PLANTS_FAMILIES,
     PLANTS_SPECIES_TO_SEARCH,
     RANKS,
+    generate_df_from_taxon_config,
 )
 
 
@@ -28,24 +28,13 @@ def init_session() -> None:
         session_state.config_choice = "ALL"
 
     if "plant_to_search" not in session_state:
-        plants = [
-            (taxon, conf["lowest_common_rank_id"])
-            for conf in [PLANTS_FAMILIES, PLANTS_SPECIES_TO_SEARCH]
-            for taxon in conf["taxon"]
-        ]
-        session_state.plant_to_search = DataFrame(
-            plants,
-            columns=["taxon", "lowest_common_rank_id"],
+        session_state.plant_to_search = generate_df_from_taxon_config(
+            [PLANTS_FAMILIES, PLANTS_SPECIES_TO_SEARCH],
         )
 
     if "insect_to_search" not in session_state:
-        insects = [
-            (taxon, INSECT_TO_SEARCH["lowest_common_rank_id"])
-            for taxon in INSECT_TO_SEARCH["taxon"]
-        ]
-        session_state.insect_to_search = DataFrame(
-            insects,
-            columns=["taxon", "lowest_common_rank_id"],
+        session_state.insect_to_search = generate_df_from_taxon_config(
+            [INSECT_TO_SEARCH],
         )
 
 

@@ -1,12 +1,12 @@
 from random import choice
 
-from pandas import DataFrame
 from streamlit import cache_data, session_state
 
 from naturalizz.configuration import (
     INSECT_TO_SEARCH,
     PLANTS_FAMILIES,
     PLANTS_SPECIES_TO_SEARCH,
+    generate_df_from_taxon_config,
 )
 
 
@@ -14,33 +14,26 @@ from naturalizz.configuration import (
 def _random_insect_taxon() -> dict:
     """Select a random insect taxon from a predefined list."""
     insects_psossbilities = session_state.insect_to_search.copy()
-    print(len(insects_psossbilities))
     if insects_psossbilities.empty:
-        insects_psossbilities = DataFrame(
-            [
-                (taxon, INSECT_TO_SEARCH["lowest_common_rank_id"])
-                for taxon in INSECT_TO_SEARCH["taxon"]
-            ],
-            columns=["taxon", "lowest_common_rank_id"],
+        session_state.insect_to_search = generate_df_from_taxon_config(
+            [INSECT_TO_SEARCH],
         )
     chosen_insect = insects_psossbilities.sample(n=1)
     session_state.insect_to_search = insects_psossbilities.drop(chosen_insect.index)
-    print(len(session_state.insect_to_search))
     return chosen_insect.to_dict(orient="records")[0]
 
 
 @cache_data(show_spinner=False)
 def _random_plant_taxon() -> dict:
     """Select a random plant taxon from a predefined list."""
-    if choice([True, False]):
-        return {
-            "taxon": choice(PLANTS_SPECIES_TO_SEARCH["taxon_list"]),
-            "lowest_common_rank_id": PLANTS_SPECIES_TO_SEARCH["lowest_common_rank_id"],
-        }
-    return {
-        "taxon": choice(PLANTS_FAMILIES),
-        "rank_filter": ["family"],
-    }
+    plant_possibilities = session_state.plant_to_search.copy()
+    if plant_possibilities.empty:
+        session_state.plant_to_search = generate_df_from_taxon_config(
+            [PLANTS_FAMILIES, PLANTS_SPECIES_TO_SEARCH],
+        )
+    chosen_plant = plant_possibilities.sample(n=1)
+    session_state.plant_to_search = plant_possibilities.drop(chosen_plant.index)
+    return chosen_plant.to_dict(orient="records")[0]
 
 
 @cache_data(show_spinner=False)

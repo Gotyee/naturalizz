@@ -42,21 +42,21 @@ PLANTS_SPECIES_TO_SEARCH = {
 }
 
 PLANTS_FAMILIES = {
-    "lowest_common_rank_id": None,  # TODO : find common ancestor
+    "rank_filter": ["family"],
     "taxon": [
         "Amaryllidaceae",
         "Apiacées",
         "Astéracées",
         "Brassicacées",
-        "Caryophyllacées",
+        "Caryophyllaceae",
         "Cypéracées",
-        "Fabacées",
+        "Fabaceae",
         "Géraniacées",
-        "Iridacées",
+        "Iridaceae",
         "Juncaceae",
         "Lamiacées",
         "Liliacées",
-        "Malvaceae",
+        "Malvaceae",  # issue?
         "Orchidaceae",
         "Papaveraceae",
         "Poacées",
@@ -64,7 +64,7 @@ PLANTS_FAMILIES = {
         "Renonculacées",
         "Rosacées",
         "Rubiacées",
-        "Scrophulariaceae",
+        "Scrophulariaceae",  # issue?
         "Solanaceae",
     ],
 }

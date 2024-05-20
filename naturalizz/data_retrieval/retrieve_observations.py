@@ -101,7 +101,7 @@ def get_taxons(
 
 @cache_data(show_spinner=False)
 def _get_obs_from_taxon(taxon_id: int) -> list[Observation]:
-    """Asynchronously retrieve observations for a specific taxon with a preference for certain parameters."""
+    """Retrieve observations for a specific taxon with a preference for certain parameters."""
     params_list = [
         {
             "taxon_id": taxon_id,

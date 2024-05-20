@@ -49,4 +49,4 @@ except Exception as e:
     launch_pic = False
 
 prof.stop()
-prof.print()
+# prof.print()
