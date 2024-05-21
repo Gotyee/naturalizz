@@ -1,6 +1,6 @@
 INSECT_TO_SEARCH = {
     "lowest_common_rank_id": 372739,  # Hexapods
-    "taxon_list": [
+    "taxon": [
         "Apis",
         "Aeschne",
         "Agrion",

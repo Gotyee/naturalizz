@@ -1,13 +1,17 @@
-from random import choice, sample
-from re import escape, search
+from random import sample
+from re import escape
 
+from pandas import DataFrame
 from pyinaturalist import Observation, Taxon
 from pyinaturalist.v1.observations import get_observations
 from pyinaturalist.v1.taxa import get_taxa, get_taxa_by_id
+from pyinaturalist_convert import to_dataframe
 from streamlit import cache_data
 from unidecode import unidecode
 
 from naturalizz.configuration import NB_PIC_DISPLAYED, RANKS
+
+# TODO: Optimize func
 
 
 def clear_cache_data_func() -> None:
@@ -43,7 +47,11 @@ def retrieve_taxon_data(
 
     """
     taxon_name = taxon_search_data["taxon"]
-    rank_filter = taxon_search_data.get("rank_filter", ["genus", "species"])
+    rank_filter = taxon_search_data["rank_filter"] or ["genus", "species"]
+    lowest_common_rank_id = taxon_search_data["lowest_common_rank_id"] or [
+        "genus",
+        "species",
+    ]
     lowest_common_rank_id = taxon_search_data.get("lowest_common_rank_id")
     taxons = get_taxons(
         taxon_name=taxon_name,
@@ -51,20 +59,26 @@ def retrieve_taxon_data(
         page=page,
         per_page=per_page,
     )
-    taxons = _filter_alias_names(taxons=taxons, taxon_name=taxon_name)
+    if "family" not in rank_filter:  # no need for filtering in that case
+        taxons = _filter_alias_names(taxons=taxons, taxon_name=taxon_name)
     if lowest_common_rank_id:
         taxons = _filter_ancestors(
             taxons=taxons,
             lowest_common_rank_id=lowest_common_rank_id,
         )
-    taxon = choice(taxons)
-    ancestors = get_taxon_ancestors(ancestor_ids=tuple(taxon.ancestor_ids))
+    taxon = taxons.sample(n=1)
+    taxon_dict = taxon.to_dict(orient="records")[0]
 
     return {
-        "name": taxon.preferred_common_name,  # TODO: check if name is empty
-        "photo": _random_taxon_photo(taxon_id=taxon.id),
-        **_get_rank_data(ancestors),
+        "name": taxon_dict["preferred_common_name"] or taxon_dict["name"],
+        "photo": _random_taxon_photo(taxon_dict["id"]),
+        **_get_rank_data(get_taxon_ancestors(taxon_dict["ancestor_ids"])),
     }
+
+
+def get_taxon_ancestors(ancestor_ids: tuple) -> list[Taxon]:
+    """Retrieve all ancestors for a taxon."""
+    return to_dataframe(Taxon.from_json_list(get_taxa_by_id(ancestor_ids, locale="fr")))
 
 
 @cache_data(show_spinner=False)
@@ -85,57 +99,57 @@ def get_taxons(
             per_page=per_page,
         ),
     )
+    if "family" in rank_filter:
+        # retrieving a random specie from this particular family
+        taxons = Taxon.from_json_list(
+            get_taxa(
+                rank=["species"],
+                taxon_id=taxons[0].id,
+                locale="fr",
+                preferred_place_id=6753,
+                page=page,
+                per_page=per_page,
+            ),
+        )
     if not taxons:
         msg = f"There was an issue for {taxon_name}"
         raise ValueError(msg)
-    return taxons
+    return to_dataframe(taxons)
 
 
-@cache_data(show_spinner=False)
-def get_taxon_ancestors(ancestor_ids: tuple) -> list[Taxon]:
-    """Retrieve all ancestors for a taxon."""
-    return Taxon.from_json_list(get_taxa_by_id(ancestor_ids, locale="fr"))
-
-
-@cache_data(show_spinner=False)
 def _get_obs_from_taxon(taxon_id: int) -> list[Observation]:
-    """Retrieve observations for a specifi taxon.
+    """Retrieve observations for a specific taxon with a preference for certain parameters."""
+    params_list = [
+        {
+            "taxon_id": taxon_id,
+            "photos": True,
+            "place_id": 6753,
+            "quality_grade": "research",
+            "term_id": 1,
+            "term_value_id": 2,
+        },
+        {
+            "taxon_id": taxon_id,
+            "photos": True,
+            "quality_grade": "research",
+            "place_id": 6753,
+        },
+        {"taxon_id": taxon_id, "photos": True, "quality_grade": "research"},
+    ]
 
-    Filtering to keep only obs with Life Stage = Adult.
-    """
-    obs = Observation.from_json_list(
-        get_observations(
-            taxon_id=taxon_id,
-            photos=True,
-            place_id=6753,  # France
-            quality_grade="research",
-            term_id=1,
-            term_value_id=2,
-        ),
-    )
-    if not obs:
-        obs = Observation.from_json_list(
-            get_observations(
-                taxon_id=taxon_id,
-                photos=True,
-                quality_grade="research",
-                place_id=6753,
-            ),
-        )
-    if not obs:
-        obs = Observation.from_json_list(
-            get_observations(
-                taxon_id=taxon_id,
-                photos=True,
-                quality_grade="research",
-            ),
-        )  # TODO :possible to get this info in one API call?
-
-    return obs
+    # Create tasks for each set of parameters
+    for params in params_list:
+        obs = Observation.from_json_list(get_observations(**params))
+        if obs:
+            return obs
+    return []
 
 
 @cache_data(show_spinner=False)
-def _random_taxon_photo(taxon_id: int, nb_photos: int = NB_PIC_DISPLAYED) -> Taxon:
+def _random_taxon_photo(
+    taxon_id: int,
+    nb_photos: int = NB_PIC_DISPLAYED,
+) -> list[str]:
     """Retrieve all images related to a taxon and returns three randomly."""
     taxon_obs = _get_obs_from_taxon(taxon_id)
     taxon_photos = [pic for obs in taxon_obs for pic in obs.photos]
@@ -148,20 +162,17 @@ def _random_taxon_photo(taxon_id: int, nb_photos: int = NB_PIC_DISPLAYED) -> Tax
     return sample(taxon_photos, nb_photos)
 
 
-def _get_rank_data(ancestors: list[Taxon]) -> dict:
+def _get_rank_data(ancestors: DataFrame) -> dict:
     """Retrieve rank name for each ancestor."""
-    ranks = RANKS.keys()
-    rank_dict = {rank: "" for rank in ranks}
-    return {
-        ancestor.rank: f"{ancestor.name} ({ancestor.preferred_common_name})"
-        if ancestor.preferred_common_name
-        else f"{ancestor.name}"
-        for ancestor in ancestors
-        if ancestor.rank in rank_dict
-    }
+    ancestors = ancestors[ancestors["rank"].isin(RANKS.keys())].copy()
+    ancestors.loc[:, "rank_label"] = ancestors["name"].str.cat(
+        ancestors["preferred_common_name"].fillna(""),
+        sep=" - ",
+    )
+    return ancestors.set_index("rank")["rank_label"].to_dict()
 
 
-def _filter_alias_names(taxons: list[Taxon], taxon_name: str) -> list[Taxon]:
+def _filter_alias_names(taxons: list[Taxon], taxon_name: str) -> DataFrame:
     """Filter to avoid unwanted match from api.
 
     For instance 'Puceron' is matched with Chrysopa Perla by the api,
@@ -171,28 +182,20 @@ def _filter_alias_names(taxons: list[Taxon], taxon_name: str) -> list[Taxon]:
         return taxons
 
     pattern = rf"\b{escape(unidecode(taxon_name).lower())}\b"
-    filtered_list = [
-        taxon
-        for taxon in taxons
-        if search(
-            pattern,
-            unidecode(
-                f"{taxon.name.lower()} {taxon.preferred_common_name.lower()}",
-            ),
-        )
-    ]
-    if not filtered_list:
+    taxons["name_for_filter"] = (
+        taxons["name"].str.lower() + " " + taxons["preferred_common_name"].str.lower()
+    ).apply(unidecode)
+    df_taxons = taxons[taxons["name_for_filter"].str.contains(pattern)]
+    if df_taxons.empty:
         msg = f"Issue filtering alias names for {taxon_name}"
         raise ValueError(msg)
-    return filtered_list
+    return df_taxons
 
 
-def _filter_ancestors(taxons: list[Taxon], lowest_common_rank_id: str) -> list[Taxon]:
-    """Remove manually taxons with undesired ancestors."""
-    taxons_with_proper_ancest = [
-        taxon for taxon in taxons if lowest_common_rank_id in taxon.ancestor_ids
-    ]
-    if not taxons_with_proper_ancest:
+def _filter_ancestors(taxons: DataFrame, lowest_common_rank_id: str) -> DataFrame:
+    """Manually removes taxons with undesired ancestors. (Poisson-guêpe example)."""
+    df_taxon = taxons[taxons["ancestor_ids"].map(lambda x: lowest_common_rank_id in x)]
+    if df_taxon.empty:
         msg = f"Issue while filtering ancestors with this ID {lowest_common_rank_id}"
         raise ValueError(msg)
-    return taxons_with_proper_ancest
+    return df_taxon
