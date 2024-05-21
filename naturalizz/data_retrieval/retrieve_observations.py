@@ -11,6 +11,8 @@ from unidecode import unidecode
 
 from naturalizz.configuration import NB_PIC_DISPLAYED, RANKS
 
+# TODO: Optimize func
+
 
 def clear_cache_data_func() -> None:
     """Clear cache for required function."""
@@ -74,7 +76,6 @@ def retrieve_taxon_data(
     }
 
 
-@cache_data(show_spinner=False)
 def get_taxon_ancestors(ancestor_ids: tuple) -> list[Taxon]:
     """Retrieve all ancestors for a taxon."""
     return to_dataframe(Taxon.from_json_list(get_taxa_by_id(ancestor_ids, locale="fr")))
@@ -98,7 +99,6 @@ def get_taxons(
             per_page=per_page,
         ),
     )
-    print(rank_filter)
     if "family" in rank_filter:
         # retrieving a random specie from this particular family
         taxons = Taxon.from_json_list(
@@ -117,7 +117,6 @@ def get_taxons(
     return to_dataframe(taxons)
 
 
-@cache_data(show_spinner=False)
 def _get_obs_from_taxon(taxon_id: int) -> list[Observation]:
     """Retrieve observations for a specific taxon with a preference for certain parameters."""
     params_list = [
