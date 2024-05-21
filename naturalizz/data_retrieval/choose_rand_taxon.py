@@ -6,49 +6,42 @@ from naturalizz.configuration import (
     INSECT_TO_SEARCH,
     PLANTS_FAMILIES,
     PLANTS_SPECIES_TO_SEARCH,
+    TAXON_TYPE,
     generate_df_from_taxon_config,
 )
 
 
 @cache_data(show_spinner=False)
-def _random_insect_taxon() -> dict:
-    """Select a random insect taxon from a predefined list."""
-    insects_psossbilities = session_state.insect_to_search.copy()
-    if insects_psossbilities.empty:
-        session_state.insect_to_search = generate_df_from_taxon_config(
-            [INSECT_TO_SEARCH],
-        )
-    chosen_insect = insects_psossbilities.sample(n=1)
-    session_state.insect_to_search = insects_psossbilities.drop(chosen_insect.index)
-    return chosen_insect.to_dict(orient="records")[0]
+def _random_taxon_core(taxon_type: str, taxon_to_search: list):
+    taxon_possibilities = session_state[taxon_type].copy()
+    if taxon_possibilities.empty:
+        session_state[taxon_type] = generate_df_from_taxon_config(taxon_to_search)
+    chosen_taxon = taxon_possibilities.sample(n=1)
+    session_state[taxon_type] = taxon_possibilities.drop(chosen_taxon.index)
+    return chosen_taxon.to_dict(orient="records")[0]
 
 
 @cache_data(show_spinner=False)
-def _random_plant_taxon() -> dict:
-    """Select a random plant taxon from a predefined list."""
-    plant_possibilities = session_state.plant_to_search.copy()
-    if plant_possibilities.empty:
-        session_state.plant_to_search = generate_df_from_taxon_config(
+def random_taxon(taxon_type: str = TAXON_TYPE["all"]) -> dict:
+    """Return random taxon among all or selected possibilities."""
+    if taxon_type == TAXON_TYPE["plant"]:
+        return _random_taxon_core(
+            TAXON_TYPE["plant"],
             [PLANTS_FAMILIES, PLANTS_SPECIES_TO_SEARCH],
         )
-    chosen_plant = plant_possibilities.sample(n=1)
-    session_state.plant_to_search = plant_possibilities.drop(chosen_plant.index)
-    return chosen_plant.to_dict(orient="records")[0]
-
-
-@cache_data(show_spinner=False)
-def random_taxon(taxon_type: str = "ALL") -> dict:
-    # TODO: INdexCatalogue
-    match taxon_type:
-        case "Plant":
-            return _random_plant_taxon()
-        case "Insect":
-            return _random_insect_taxon()
-        case "ALL":
-            return choice([_random_plant_taxon(), _random_insect_taxon()])
+    if taxon_type == TAXON_TYPE["insect"]:
+        return _random_taxon_core(TAXON_TYPE["insect"], [INSECT_TO_SEARCH])
+    return choice(
+        [
+            _random_taxon_core(
+                TAXON_TYPE["plant"],
+                [PLANTS_FAMILIES, PLANTS_SPECIES_TO_SEARCH],
+            ),
+            _random_taxon_core(TAXON_TYPE["insect"], [INSECT_TO_SEARCH]),
+        ],
+    )
 
 
 def clear_random_cache() -> None:
     random_taxon.clear()
-    _random_plant_taxon.clear()
-    _random_insect_taxon.clear()
+    _random_taxon_core.clear()

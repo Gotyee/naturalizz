@@ -21,6 +21,7 @@ def quizz_starter() -> None:
     session_state.show = not session_state.show
     random_taxon_data = random_taxon(taxon_type=session_state.config_choice)
     session_state.data = retrieve_taxon_data(random_taxon_data)
+    print(random_taxon_data)
     # session_state.data = retrieve_taxon_data(
     #     {"lowest_common_rank_id": 372739, "taxon": "Tenthrède"},
     # )

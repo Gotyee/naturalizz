@@ -45,7 +45,11 @@ def retrieve_taxon_data(
 
     """
     taxon_name = taxon_search_data["taxon"]
-    rank_filter = taxon_search_data.get("rank_filter", ["genus", "species"])
+    rank_filter = taxon_search_data["rank_filter"] or ["genus", "species"]
+    lowest_common_rank_id = taxon_search_data["lowest_common_rank_id"] or [
+        "genus",
+        "species",
+    ]
     lowest_common_rank_id = taxon_search_data.get("lowest_common_rank_id")
     taxons = get_taxons(
         taxon_name=taxon_name,
@@ -53,7 +57,8 @@ def retrieve_taxon_data(
         page=page,
         per_page=per_page,
     )
-    taxons = _filter_alias_names(taxons=taxons, taxon_name=taxon_name)
+    if "family" not in rank_filter:  # no need for filtering in that case
+        taxons = _filter_alias_names(taxons=taxons, taxon_name=taxon_name)
     if lowest_common_rank_id:
         taxons = _filter_ancestors(
             taxons=taxons,
@@ -93,6 +98,19 @@ def get_taxons(
             per_page=per_page,
         ),
     )
+    print(rank_filter)
+    if "family" in rank_filter:
+        # retrieving a random specie from this particular family
+        taxons = Taxon.from_json_list(
+            get_taxa(
+                rank=["species"],
+                taxon_id=taxons[0].id,
+                locale="fr",
+                preferred_place_id=6753,
+                page=page,
+                per_page=per_page,
+            ),
+        )
     if not taxons:
         msg = f"There was an issue for {taxon_name}"
         raise ValueError(msg)

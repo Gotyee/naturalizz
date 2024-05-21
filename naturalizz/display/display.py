@@ -15,7 +15,7 @@ from naturalizz.app_actions import (
     quizz_starter,
     retrieve_and_resize_img_list,
 )
-from naturalizz.configuration import NB_PIC_DISPLAYED, RANKS
+from naturalizz.configuration import NB_PIC_DISPLAYED, RANKS, TAXON_TYPE
 
 HIDE_IMG_FS_OPTION = """
 <style>
@@ -59,7 +59,7 @@ def display_selection_bar_and_launch_button() -> None:
         (
             radio(
                 label="Select which configuration to use",
-                options=["ALL", "Insect", "Plant"],
+                options=[value for _, value in TAXON_TYPE.items()],
                 horizontal=True,
                 key="config_choice",
             ),
@@ -74,6 +74,7 @@ def display_selection_bar_and_launch_button() -> None:
 
 
 def display_image_and_result() -> None:
+    """Display images related to taxon and its data, plus the reveal button."""
     if session_state.launch_pic:
         quizz_starter()
     display_images()

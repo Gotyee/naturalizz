@@ -5,6 +5,7 @@ from naturalizz.configuration import (
     PLANTS_FAMILIES,
     PLANTS_SPECIES_TO_SEARCH,
     RANKS,
+    TAXON_TYPE,
     generate_df_from_taxon_config,
 )
 
@@ -27,13 +28,13 @@ def init_session() -> None:
     if "config_choice" not in session_state:
         session_state.config_choice = "ALL"
 
-    if "plant_to_search" not in session_state:
-        session_state.plant_to_search = generate_df_from_taxon_config(
+    if TAXON_TYPE["plant"] not in session_state:
+        session_state[TAXON_TYPE["plant"]] = generate_df_from_taxon_config(
             [PLANTS_FAMILIES, PLANTS_SPECIES_TO_SEARCH],
         )
 
-    if "insect_to_search" not in session_state:
-        session_state.insect_to_search = generate_df_from_taxon_config(
+    if TAXON_TYPE["insect"] not in session_state:
+        session_state[TAXON_TYPE["insect"]] = generate_df_from_taxon_config(
             [INSECT_TO_SEARCH],
         )
 
