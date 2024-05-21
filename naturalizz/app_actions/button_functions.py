@@ -1,3 +1,4 @@
+from pandas import DataFrame
 from streamlit import session_state
 
 from naturalizz.app_actions.image_handling import clear_image_cache
@@ -18,10 +19,8 @@ def quizz_starter() -> None:
     clear_random_cache()
     clear_image_cache()
 
-    session_state.show = not session_state.show
     random_taxon_data = random_taxon(taxon_type=session_state.config_choice)
     session_state.data = retrieve_taxon_data(random_taxon_data)
-    print(random_taxon_data)
     # session_state.data = retrieve_taxon_data(
     #     {"lowest_common_rank_id": 372739, "taxon": "Tenthrède"},
     # )
@@ -36,3 +35,17 @@ def fill_text_field_with_data() -> None:
         },
     )
     session_state.reveal_data = True
+
+
+def store_answers_state() -> None:
+    """Append taxon data to a df with answer state."""
+    if session_state.answer == "True":
+        session_state.answer_data = session_state.answer_data.append(
+            DataFrame(session_state.data).assign(answer=True),
+            ignore_index=True,
+        )
+    elif session_state.answer == "False":
+        session_state.answer_data = session_state.answer_data.append(
+            DataFrame(session_state.data).assign(answer=False),
+            ignore_index=True,
+        )

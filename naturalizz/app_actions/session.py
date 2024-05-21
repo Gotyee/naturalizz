@@ -12,14 +12,14 @@ from naturalizz.configuration import (
 
 def init_session() -> None:
     """Init session_state parameters."""
-    if "show" not in session_state:
-        session_state.show = False
-
     if "data" not in session_state:
         session_state.data = None
 
     if "reveal_data" not in session_state:
         session_state.reveal_data = False
+
+    if "ready_to_start" not in session_state:
+        session_state.ready_to_restart = True
 
     for rank in RANKS:
         if rank not in session_state:
@@ -27,6 +27,9 @@ def init_session() -> None:
 
     if "config_choice" not in session_state:
         session_state.config_choice = "ALL"
+
+    if "answer" not in session_state:
+        session_state.answer = None
 
     if TAXON_TYPE["plant"] not in session_state:
         session_state[TAXON_TYPE["plant"]] = generate_df_from_taxon_config(
@@ -41,8 +44,8 @@ def init_session() -> None:
 
 def reset_session() -> None:
     """Reset session_state parameters."""
-    session_state.show = False
     session_state.data = None
     session_state.reveal_data = False
+    session_state.answer = None
     for rank in RANKS:
         session_state[rank] = ""

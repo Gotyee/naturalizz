@@ -25,9 +25,9 @@ button[title="View fullscreen"]{
 """
 
 
-def display_images() -> DeltaGenerator:
-    """Display images to user."""
-    if not session_state.show:
+def _images_section() -> DeltaGenerator:
+    """Display images to user after data has been fetched."""
+    if not session_state.data:
         return empty()
     images_container = container()
     image_cols = columns(NB_PIC_DISPLAYED)
@@ -42,7 +42,7 @@ def display_images() -> DeltaGenerator:
     return images_container
 
 
-def display_results() -> DeltaGenerator:
+def _results_section() -> DeltaGenerator:
     """Show results to user if reveal button has been pressed."""
     if not session_state.reveal_data:
         return empty()
@@ -73,14 +73,24 @@ def display_selection_bar_and_launch_button() -> None:
         )
 
 
-def display_image_and_result() -> None:
+def display_data_section() -> None:
     """Display images related to taxon and its data, plus the reveal button."""
+    # prevent result skip if misclicked
     if session_state.launch_pic:
         quizz_starter()
-    display_images()
-    display_results()
-    if not session_state.reveal_data and session_state.show:
+    _images_section()
+    _results_section()
+    if not session_state.reveal_data and session_state.data:
         button(
             "Click to Hide/Reveal Text",
             on_click=fill_text_field_with_data,
+        )
+    if not session_state.answer and session_state.reveal_data:
+        (
+            radio(
+                label="How did you answer the quizz?",
+                options=["Correct", "Wrong"],
+                horizontal=True,
+                key="answer",
+            ),
         )
