@@ -2,3 +2,4 @@ streamlit >= 1.3
 pyinaturalist >=0.19
 unidecode >=1.3
 pyinaturalist_convert
+tablib
