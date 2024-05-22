@@ -139,8 +139,10 @@ def _get_obs_from_taxon(taxon_id: int) -> list[Observation]:
 
     # Create tasks for each set of parameters
     for params in params_list:
-        obs = Observation.from_json_list(get_observations(**params))
+        obs = Observation.from_json_list(get_observations(**params, per_page=100))
         if obs:
+            print(params)
+            print(len(obs))
             return obs
     return []
 

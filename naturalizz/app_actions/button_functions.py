@@ -1,4 +1,4 @@
-from streamlit import session_state
+from streamlit import logger, session_state
 
 from naturalizz.app_actions.image_handling import clear_image_cache
 from naturalizz.app_actions.session import reset_session
@@ -10,6 +10,8 @@ from naturalizz.data_retrieval import (
     retrieve_taxon_data,
 )
 
+app_logger = logger.get_logger(__name__)
+
 
 def quizz_starter() -> None:
     """Reset sessions_state parameters and retrieve taxon data."""
@@ -20,8 +22,9 @@ def quizz_starter() -> None:
 
     session_state.show = not session_state.show
     random_taxon_data = random_taxon(taxon_type=session_state.config_choice)
+    app_logger.info(random_taxon_data)
     session_state.data = retrieve_taxon_data(random_taxon_data)
-    print(random_taxon_data)
+
     # session_state.data = retrieve_taxon_data(
     #     {"lowest_common_rank_id": 372739, "taxon": "Tenthrède"},
     # )
