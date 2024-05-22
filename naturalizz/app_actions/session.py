@@ -4,6 +4,8 @@ from naturalizz.configuration import (
     INSECT_TO_SEARCH,
     PLANTS_FAMILIES,
     PLANTS_SPECIES_TO_SEARCH,
+    PYRENEAN_FAMILIES_TO_SEARCH,
+    PYRENEAN_SPECIES_TO_SEARCH,
     RANKS,
     TAXON_TYPE,
     generate_df_from_taxon_config,
@@ -36,6 +38,11 @@ def init_session() -> None:
     if TAXON_TYPE["insect"] not in session_state:
         session_state[TAXON_TYPE["insect"]] = generate_df_from_taxon_config(
             [INSECT_TO_SEARCH],
+        )
+
+    if TAXON_TYPE["pyrenean"] not in session_state:
+        session_state[TAXON_TYPE["pyrenean"]] = generate_df_from_taxon_config(
+            [PYRENEAN_FAMILIES_TO_SEARCH, PYRENEAN_SPECIES_TO_SEARCH],
         )
 
 

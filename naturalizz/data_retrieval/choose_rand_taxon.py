@@ -6,6 +6,8 @@ from naturalizz.configuration import (
     INSECT_TO_SEARCH,
     PLANTS_FAMILIES,
     PLANTS_SPECIES_TO_SEARCH,
+    PYRENEAN_FAMILIES_TO_SEARCH,
+    PYRENEAN_SPECIES_TO_SEARCH,
     TAXON_TYPE,
     generate_df_from_taxon_config,
 )
@@ -31,6 +33,11 @@ def random_taxon(taxon_type: str = TAXON_TYPE["all"]) -> dict:
         )
     if taxon_type == TAXON_TYPE["insect"]:
         return _random_taxon_core(TAXON_TYPE["insect"], [INSECT_TO_SEARCH])
+    if taxon_type == TAXON_TYPE["pyrenean"]:
+        return _random_taxon_core(
+            TAXON_TYPE["pyrenean"],
+            [PYRENEAN_FAMILIES_TO_SEARCH, PYRENEAN_SPECIES_TO_SEARCH],
+        )
     return choice(
         [
             _random_taxon_core(
