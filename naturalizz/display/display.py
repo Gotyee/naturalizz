@@ -76,10 +76,12 @@ def display_selection_bar_and_launch_button() -> None:
 def display_data_section() -> None:
     """Display images related to taxon and its data, plus the reveal button."""
     # prevent result skip if misclicked
-    if session_state.launch_pic:
+    if session_state.launch_pic and session_state.ready_to_restart:
         quizz_starter()
+
     _images_section()
     _results_section()
+
     if not session_state.reveal_data and session_state.data:
         button(
             "Click to Hide/Reveal Text",

@@ -20,7 +20,7 @@ def init_session() -> None:
     if "reveal_data" not in session_state:
         session_state.reveal_data = False
 
-    if "ready_to_start" not in session_state:
+    if "ready_to_restart" not in session_state:
         session_state.ready_to_restart = True
 
     for rank in RANKS:

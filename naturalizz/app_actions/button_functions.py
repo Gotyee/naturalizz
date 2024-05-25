@@ -24,6 +24,7 @@ def quizz_starter() -> None:
     random_taxon_data = random_taxon(taxon_type=session_state.config_choice)
     app_logger.info(random_taxon_data)
     session_state.data = retrieve_taxon_data(random_taxon_data)
+    session_state.ready_to_restart = False
     # session_state.data = retrieve_taxon_data(
     #     {
     #         "lowest_common_rank_id": 211194,
@@ -42,6 +43,7 @@ def fill_text_field_with_data() -> None:
         },
     )
     session_state.reveal_data = True
+    session_state.ready_to_restart = True
 
 
 def store_answers_state() -> None:
