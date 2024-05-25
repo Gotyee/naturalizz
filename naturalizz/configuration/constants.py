@@ -14,4 +14,5 @@ TAXON_TYPE = {
     "all": "ALL",
     "plant": "Plant",
     "insect": "Insect",
+    "pyrenean": "Pyrenean",
 }
