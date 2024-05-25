@@ -1,5 +1,7 @@
+import logging
+
 from pandas import DataFrame
-from streamlit import logger, session_state
+from streamlit import session_state
 
 from naturalizz.app_actions.image_handling import clear_image_cache
 from naturalizz.app_actions.session import reset_session
@@ -11,7 +13,9 @@ from naturalizz.data_retrieval import (
     retrieve_taxon_data,
 )
 
-app_logger = logger.get_logger(__name__)
+logging.basicConfig(level=logging.WARNING)
+app_logger = logging.getLogger(__name__)
+app_logger.setLevel(logging.INFO)
 
 
 def quizz_starter() -> None:

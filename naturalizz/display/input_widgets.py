@@ -1,9 +1,4 @@
-from streamlit import (
-    button,
-    container,
-    radio,
-    session_state,
-)
+from streamlit import button, container, radio, session_state
 
 from naturalizz.app_actions import (
     fill_text_field_with_data,
@@ -31,6 +26,7 @@ def launch_button() -> None:
             "Launch picture",
             key="launch_pic",
             use_container_width=True,
+            type="primary",
         )
 
 
@@ -41,6 +37,7 @@ def reveal_data_button() -> None:
             "Click to Hide/Reveal Text",
             on_click=fill_text_field_with_data,
             key="reveal_data_button",
+            use_container_width=True,
         )
 
 
