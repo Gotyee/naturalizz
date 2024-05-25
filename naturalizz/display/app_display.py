@@ -21,14 +21,18 @@ def app() -> None:
     title("Naturalizz", anchor=False)
 
     selection_bar()
-    if session_state.data:
-        info(
-            "You are currently looking for a "
-            f"{session_state.data['data_used_for_search']['rank_filter']}",
-            icon="ℹ️",
-        )
+
     try:
         display_data_section()
+        if session_state.data:
+            rank_for_display = " or ".join(
+                session_state.data["data_used_for_search"]["rank_filter"],
+            )
+
+            info(
+                f"You are currently looking for a {rank_for_display}",
+                icon="ℹ️",
+            )
         reveal_data_button()
         launch_button()
         answer_state_input()
