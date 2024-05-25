@@ -1,9 +1,5 @@
-from .display import (
-    display_data_section,
-    display_selection_bar_and_launch_button,
-)
+from .app_display import app
 
 __all__ = [
-    "display_selection_bar_and_launch_button",
-    "display_data_section",
+    "app",
 ]

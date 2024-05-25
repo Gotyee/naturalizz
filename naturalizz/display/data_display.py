@@ -1,21 +1,18 @@
 from streamlit import (
-    button,
     columns,
     container,
     empty,
     markdown,
-    radio,
     session_state,
     write,
 )
 from streamlit.delta_generator import DeltaGenerator
 
 from naturalizz.app_actions import (
-    fill_text_field_with_data,
     quizz_starter,
     retrieve_and_resize_img_list,
 )
-from naturalizz.configuration import NB_PIC_DISPLAYED, RANKS, TAXON_TYPE
+from naturalizz.configuration import NB_PIC_DISPLAYED, RANKS
 
 HIDE_IMG_FS_OPTION = """
 <style>
@@ -53,46 +50,11 @@ def _results_section() -> DeltaGenerator:
     return result_container
 
 
-def display_selection_bar_and_launch_button() -> None:
-    """Display avaiables filter options and quizz start button."""
-    with container():
-        (
-            radio(
-                label="Select which configuration to use",
-                options=[value for _, value in TAXON_TYPE.items()],
-                horizontal=True,
-                key="config_choice",
-            ),
-        )
-
-    with container():
-        button(
-            "Launch picture",
-            key="launch_pic",
-            use_container_width=True,
-        )
-
-
 def display_data_section() -> None:
     """Display images related to taxon and its data, plus the reveal button."""
     # prevent result skip if misclicked
-    if session_state.launch_pic and session_state.ready_to_restart:
+    if session_state.get("launch_pic") and session_state.ready_to_restart:
         quizz_starter()
 
     _images_section()
     _results_section()
-
-    if not session_state.reveal_data and session_state.data:
-        button(
-            "Click to Hide/Reveal Text",
-            on_click=fill_text_field_with_data,
-        )
-    if not session_state.answer and session_state.reveal_data:
-        (
-            radio(
-                label="How did you answer the quizz?",
-                options=["Correct", "Wrong"],
-                horizontal=True,
-                key="answer",
-            ),
-        )

@@ -70,6 +70,7 @@ def retrieve_taxon_data(
     taxon_dict = taxon.to_dict(orient="records")[0]
 
     return {
+        "data_used_for_search": {"taxon_name": taxon_name, "rank_filter": rank_filter},
         "name": taxon_dict["preferred_common_name"] or taxon_dict["name"],
         "photo": _random_taxon_photo(taxon_dict["id"]),
         **_get_rank_data(get_taxon_ancestors(taxon_dict["ancestor_ids"])),
