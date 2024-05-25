@@ -8,6 +8,7 @@ from naturalizz.display import (
     display_selection_bar_and_launch_button,
 )
 
+st.set_page_config(layout="wide")
 init_session()
 
 st.title("Naturalizz", anchor=False)

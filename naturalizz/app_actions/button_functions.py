@@ -25,7 +25,11 @@ def quizz_starter() -> None:
     app_logger.info(random_taxon_data)
     session_state.data = retrieve_taxon_data(random_taxon_data)
     # session_state.data = retrieve_taxon_data(
-    #     {"lowest_common_rank_id": 372739, "taxon": "Tenthrède"},
+    #     {
+    #         "lowest_common_rank_id": 211194,
+    #         "taxon": " Crataegus suborbiculata",
+    #         "rank_filter": None,
+    #     },
     # )
 
 

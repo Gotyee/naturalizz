@@ -54,7 +54,7 @@ PLANTS_FAMILIES = {
         "Caryophyllaceae",
         "Cypéracées",
         "Fabaceae",
-        "Géraniacées",
+        "Géraniaceae",
         "Iridaceae",
         "Juncaceae",
         "Lamiacées",
