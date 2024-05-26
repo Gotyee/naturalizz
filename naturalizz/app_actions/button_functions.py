@@ -1,6 +1,5 @@
 import logging
 
-from pandas import DataFrame
 from streamlit import session_state
 
 from naturalizz.app_actions.image_handling import clear_image_cache
@@ -13,7 +12,7 @@ from naturalizz.data_retrieval import (
     retrieve_taxon_data,
 )
 
-logging.basicConfig(level=logging.WARNING)
+logging.basicConfig(level=logging.CRITICAL)
 app_logger = logging.getLogger(__name__)
 app_logger.setLevel(logging.INFO)
 
@@ -29,13 +28,6 @@ def quizz_starter() -> None:
     app_logger.info(random_taxon_data)
     session_state.data = retrieve_taxon_data(random_taxon_data)
     session_state.ready_to_restart = False
-    # session_state.data = retrieve_taxon_data(
-    #     {
-    #         "lowest_common_rank_id": 211194,
-    #         "taxon": " Crataegus suborbiculata",
-    #         "rank_filter": None,
-    #     },
-    # )
 
 
 def fill_text_field_with_data() -> None:
@@ -48,17 +40,3 @@ def fill_text_field_with_data() -> None:
     )
     session_state.reveal_data = True
     session_state.ready_to_restart = True
-
-
-def store_answers_state() -> None:
-    """Append taxon data to a df with answer state."""
-    if session_state.answer == "True":
-        session_state.answer_data = session_state.answer_data.append(
-            DataFrame(session_state.data).assign(answer=True),
-            ignore_index=True,
-        )
-    elif session_state.answer == "False":
-        session_state.answer_data = session_state.answer_data.append(
-            DataFrame(session_state.data).assign(answer=False),
-            ignore_index=True,
-        )

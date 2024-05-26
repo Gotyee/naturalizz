@@ -1,11 +1,4 @@
-from streamlit import (
-    columns,
-    container,
-    empty,
-    markdown,
-    session_state,
-    write,
-)
+from streamlit import columns, container, empty, markdown, session_state, write
 from streamlit.delta_generator import DeltaGenerator
 
 from naturalizz.app_actions import (
@@ -47,6 +40,7 @@ def _results_section() -> DeltaGenerator:
     with result_container:
         for rank in RANKS:
             write(session_state[rank])
+
     return result_container
 
 

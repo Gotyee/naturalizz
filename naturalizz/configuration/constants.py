@@ -9,7 +9,6 @@ RANKS = {
 
 NB_PIC_DISPLAYED = 3
 
-
 TAXON_TYPE = {
     "all": "ALL",
     "plant": "Plant",

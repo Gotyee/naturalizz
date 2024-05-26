@@ -27,12 +27,14 @@ def launch_button() -> None:
             key="launch_pic",
             use_container_width=True,
             type="primary",
+            disabled=session_state.get("launch_disabled", False),  # not reveal-data?
         )
 
 
 def reveal_data_button() -> None:
     """Display or not the reveal data button."""
     if not session_state.reveal_data and session_state.data:
+        session_state["launch_disabled"] = True
         button(
             "Click to Hide/Reveal Text",
             on_click=fill_text_field_with_data,
@@ -43,12 +45,15 @@ def reveal_data_button() -> None:
 
 def answer_state_input() -> None:
     """Display or not radio widget to retrieve answer state (correct or not)."""
-    if not session_state.answer and session_state.reveal_data:
-        (
+    if session_state.reveal_data:
+        answer = (
             radio(
                 label="How did you answer the quizz?",
                 options=["Correct", "Wrong"],
                 horizontal=True,
                 key="answer",
+                index=None,
             ),
         )
+        if answer:
+            session_state["launch_disabled"] = False
