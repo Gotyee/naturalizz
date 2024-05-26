@@ -4,7 +4,7 @@ from .image_handling import (
     retrieve_and_resize_img,
     retrieve_and_resize_img_list,
 )
-from .session import init_session, reset_session
+from .session import init_session, reset_session, store_answers_state
 
 __all__ = [
     "fill_text_field_with_data",
@@ -14,4 +14,5 @@ __all__ = [
     "reset_session",
     "retrieve_and_resize_img_list",
     "clear_image_cache",
+    "store_answers_state",
 ]

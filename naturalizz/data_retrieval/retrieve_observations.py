@@ -70,6 +70,7 @@ def retrieve_taxon_data(
     taxon_dict = taxon.to_dict(orient="records")[0]
 
     return {
+        "data_used_for_search": {"taxon_name": taxon_name, "rank_filter": rank_filter},
         "name": taxon_dict["preferred_common_name"] or taxon_dict["name"],
         "photo": _random_taxon_photo(taxon_dict["id"]),
         **_get_rank_data(get_taxon_ancestors(taxon_dict["ancestor_ids"])),
@@ -123,7 +124,6 @@ def _get_obs_from_taxon(taxon_id: int) -> list[Observation]:
         {
             "taxon_id": taxon_id,
             "photos": True,
-            "place_id": 6753,
             "quality_grade": "research",
             "term_id": 1,
             "term_value_id": 2,
@@ -132,17 +132,13 @@ def _get_obs_from_taxon(taxon_id: int) -> list[Observation]:
             "taxon_id": taxon_id,
             "photos": True,
             "quality_grade": "research",
-            "place_id": 6753,
         },
-        {"taxon_id": taxon_id, "photos": True, "quality_grade": "research"},
     ]
 
     # Create tasks for each set of parameters
     for params in params_list:
         obs = Observation.from_json_list(get_observations(**params, per_page=100))
         if obs:
-            print(params)
-            print(len(obs))
             return obs
     return []
 
@@ -161,6 +157,7 @@ def _random_taxon_photo(
     if len(taxon_photos) < nb_photos:
         taxon_photos.extend([None] * (nb_photos - len(taxon_photos)))
         return taxon_photos
+
     return sample(taxon_photos, nb_photos)
 
 
