@@ -6,7 +6,6 @@ from sqlalchemy import (
     String,
     func,
 )
-from sqlalchemy.dialects.mysql import INTEGER
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
@@ -17,14 +16,14 @@ metadata = Base.metadata
 class Taxon(Base):
     __tablename__ = "taxon"
 
-    id = Column(INTEGER(11), primary_key=True, autoincrement=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
 
-    name = Column(String(255), nullable=False)
-    specie = Column(String(255), nullable=False)
-    genus = Column(String(255))
-    family = Column(String(255))
-    order = Column(String(255))
-    class_ = Column(String(255))
+    name_id = Column(Integer, ForeignKey("language_translation.id"))
+    specie_id = Column(Integer, ForeignKey("language_translation.id"))
+    genus_id = Column(Integer, ForeignKey("language_translation.id"))
+    family_id = Column(Integer, ForeignKey("language_translation.id"))
+    order_id = Column(Integer, ForeignKey("language_translation.id"))
+    class_id = Column(Integer, ForeignKey("language_translation.id"))
 
     updated_at = Column(
         DateTime(timezone=True),
@@ -36,7 +35,7 @@ class Taxon(Base):
 class ConfigType(Base):
     __tablename__ = "config_type"
 
-    id = Column(INTEGER(11), primary_key=True, autoincrement=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
 
     type_name = Column(String(255), nullable=False)
 
@@ -61,5 +60,13 @@ class TaxonPhoto(Base):
     __tablename__ = "taxon_photo"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
+    taxon_id = Column(Integer, ForeignKey("taxon.id"))
     photo_url = Column(String, nullable=False)
-    taxon_type_id = Column(Integer, ForeignKey("taxon.id"))
+
+
+class LanguageTranslation(Base):
+    __tablename__ = "language_translation"
+
+    id = Column(Integer(), primary_key=True, autoincrement=True)
+    vernacular = Column(String(255), nullable=False)
+    french = Column(String(255))

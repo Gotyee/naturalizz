@@ -1,0 +1,16 @@
+FROM python:3.12
+
+# Copy the Alembic migration files and requirements
+COPY naturalizz/data_warehouse naturalizz/data_warehouse
+
+WORKDIR naturalizz/data_warehouse
+
+# Install Python dependencies
+RUN pip3 install -r requirements.txt
+
+ENV PYTHONPATH "${PYTHONPATH}:/"
+
+# Run Alembic migrations
+CMD ["alembic", "upgrade", "head"]
+
+#ENTRYPOINT ["tail", "-f", "/dev/null"]

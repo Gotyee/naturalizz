@@ -5,4 +5,4 @@ pyinaturalist_convert >= 0.6.3
 tablib
 sqlalchemy
 alembic
-apache-airflow
+apache-airflow >=2.6.0
